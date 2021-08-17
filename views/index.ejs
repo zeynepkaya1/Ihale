@@ -9,24 +9,15 @@
     <section>
         <h1>İhaleler</h1>
         <ul>
-            <li>
-                <a href="#">İhale 1</a>
-                <p>Detay</p>
-                <p>status</p>
-                <p>minPrice</p>
-            </li>
-            <li>
-                <a href="#">İhale 2</a>
-                <p>Detay</p>
-                <p>status</p>
-                <p>minPrice</p>
-            </li>
-            <li>
-                <a href="#">İhale 3</a>
-                <p>Detay</p>
-                <p>status</p>
-                <p>minPrice</p>
-            </li>
+            <% tenders.forEach(tender => { %>
+                <li>
+                    <a href="/tender/<%=tender._id%>"><%=tender.title%></a>
+                    <p><%=tender.detail%></p>
+                    <p><%=tender.status%></p>
+                    <p><%=tender.minPrice%></p>
+                </li>
+            <% }) %>
+            
         </ul>
     </section>
 </body>

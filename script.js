@@ -11,10 +11,10 @@ const dbURL = 'mongodb+srv://admin:admin@tenderdb.f9vl9.mongodb.net/tender-db?re
 app.set("view engine", "ejs");
 
 mongoose.connect(dbURL, { useUnifiedTopology: true, useUnifiedTopology: true })
-.then((result) => app.listen(3000, () => {
-    console.log("app is running on port 3000...");
-}))
-.catch((err) => console.log(err))
+    .then((result) => app.listen(3000, () => {
+        console.log("app is running on port 3000...");
+    }))
+    .catch((err) => console.log(err))
 
 app.use(express.static('public'))
 
@@ -38,8 +38,31 @@ const database = {
 };
 
 app.get("/", (req, res) => {
-    res.render("index", {title: "Anasayfa"});
+    Tender.find().sort({ createdAt: -1 })
+        .then((result) => {
+            res.render("index", { title: "Anasayfa", tenders: result });
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
 })
+
+app.get("/tender/:id", (req, res) => {
+    const id = req.params.id
+
+    Tender.findById(id)
+    .then((result) => {
+        res.render("tender", { tender: result, title: "Detay"})
+    })
+})
+
+app.get("/login", (req, res) => {
+    res.render("login", { title: "Login" })
+})
+
+
+
 
 app.post("/signin", (req, res) => {
     if (
@@ -52,13 +75,9 @@ app.post("/signin", (req, res) => {
     }
 })
 
-app.get("/login", (req, res) => {
-    res.render("login", {title: "Login"})
-})
-
 app.post("/register", (req, res) => {
     const { email, name, password } = req.body;
-    bcrypt.hash(password, null, null, function(err, hash){
+    bcrypt.hash(password, null, null, function (err, hash) {
         console.log(hash);
     })
     database.users.push({
@@ -84,32 +103,32 @@ app.get("/profile/:id", (req, res) => {
     }
 })
 
-app.get("/add", (req, res) => {
-    const tender = new Tender({
-        title: "yeni baslik",
-        detail: "detay",
-        status: 1,
-        minPrice: 1
-    })
+// app.get("/add", (req, res) => {
+//     const tender = new Tender({
+//         title: "yeni baslik",
+//         detail: "detay",
+//         status: 1,
+//         minPrice: 1
+//     })
 
-    tender.save()
-    .then((result) => {
-        res.send(result)
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
+//     tender.save()
+//     .then((result) => {
+//         res.send(result)
+//     })
+//     .catch((err) => {
+//         console.log(err)
+//     })
+// })
 
-app.get("/all", (req, res) => {
-    Tender.find().then((result) => {
-        res.send(result)
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
+// app.get("/all", (req, res) => {
+//     Tender.find().then((result) => {
+//         res.send(result)
+//     })
+//     .catch((err) => {
+//         console.log(err)
+//     })
+// })
 
-app.use((req,res) => {
-    res.status(404).render("404", {title: "Sayfa bulunamadı..."})
+app.use((req, res) => {
+    res.status(404).render("404", { title: "Sayfa bulunamadı..." })
 })
