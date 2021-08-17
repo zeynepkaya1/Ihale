@@ -1,8 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const bcryp = require("bcrypt-nodejs");
+const mongoose = require("mongoose");
+const Tender = require("./models/ihale")
 
 const app = express();
+
+const dbURL = 'mongodb+srv://admin:admin@tenderdb.f9vl9.mongodb.net/tender-db?retryWrites=true&w=majority';
+
+mongoose.connect(dbURL, { useUnifiedTopology: true, useUnifiedTopology: true })
+.then((result) => app.listen(3000, () => {
+    console.log("app is running on port 3000...");
+}))
+.catch((err) => console.log(err))
+
 
 app.use(bodyParser.json());
 
@@ -66,6 +77,28 @@ app.get("/profile/:id", (req, res) => {
     }
 })
 
-app.listen(3000, () => {
-    console.log("app is running on port 3000...");
+app.get("/add", (req, res) => {
+    const tender = new Tender({
+        title: "yeni baslik",
+        detail: "detay",
+        status: 1,
+        minPrice: 1
+    })
+
+    tender.save()
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+})
+
+app.get("/all", (req, res) => {
+    Tender.find().then((result) => {
+        res.send(result)
+    })
+    .catch((err) => {
+        console.log(err)
+    })
 })
