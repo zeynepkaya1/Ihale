@@ -2,11 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const bcryp = require("bcrypt-nodejs");
 const mongoose = require("mongoose");
-const Tender = require("./models/ihale")
+const Tender = require("./models/ihale");
 
 const app = express();
 
 const dbURL = 'mongodb+srv://admin:admin@tenderdb.f9vl9.mongodb.net/tender-db?retryWrites=true&w=majority';
+
+app.set("view engine", "ejs");
 
 mongoose.connect(dbURL, { useUnifiedTopology: true, useUnifiedTopology: true })
 .then((result) => app.listen(3000, () => {
@@ -14,6 +16,7 @@ mongoose.connect(dbURL, { useUnifiedTopology: true, useUnifiedTopology: true })
 }))
 .catch((err) => console.log(err))
 
+app.use(express.static('public'))
 
 app.use(bodyParser.json());
 
@@ -35,7 +38,7 @@ const database = {
 };
 
 app.get("/", (req, res) => {
-    res.send(database.users);
+    res.render("index", {title: "Anasayfa"});
 })
 
 app.post("/signin", (req, res) => {
@@ -47,6 +50,10 @@ app.post("/signin", (req, res) => {
     } else {
         res.status(400).json("error logging in...");
     }
+})
+
+app.get("/login", (req, res) => {
+    res.render("login", {title: "Login"})
 })
 
 app.post("/register", (req, res) => {
@@ -101,4 +108,8 @@ app.get("/all", (req, res) => {
     .catch((err) => {
         console.log(err)
     })
+})
+
+app.use((req,res) => {
+    res.status(404).render("404", {title: "Sayfa bulunamadı..."})
 })
