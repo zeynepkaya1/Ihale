@@ -17,6 +17,7 @@ mongoose.connect(dbURL, { useUnifiedTopology: true, useUnifiedTopology: true })
     .catch((err) => console.log(err))
 
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
 
 app.use(bodyParser.json());
 
@@ -45,7 +46,6 @@ app.get("/", (req, res) => {
         .catch((err) => {
             console.log(err)
         })
-
 })
 
 app.get("/tender/:id", (req, res) => {
@@ -61,6 +61,31 @@ app.get("/login", (req, res) => {
     res.render("login", { title: "Login" })
 })
 
+app.get("/admin", (req, res) => {
+    Tender.find().sort({ createdAt: -1 })
+    .then((result) => {
+        res.render("admin", { title: "Admin", tenders: result });
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+})
+
+app.get("/admin/add", (req, res) => {
+    res.render("add", { title: "Yeni ihale"})
+})
+
+app.post("/admin/add", (req, res) => {
+    const tender = new Tender(req.body)
+
+    tender.save()
+    .then((result) => {
+        res.redirect('/admin')
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+})
 
 
 

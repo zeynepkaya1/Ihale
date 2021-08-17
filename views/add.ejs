@@ -1,0 +1,20 @@
+<html lang="en">
+<head>
+    <%-include('./inc/head')%>
+</head>
+<body>  
+    <%-include('./inc/nav')%>
+
+    <section>
+        <h1>Yeni İhale Ekle</h1>
+        <form action="/admin/add" method="POST">
+            <input type="text" name="title" id="" placeholder="title" required>
+            <input type="text" name="detail" id="" placeholder="detail" required>
+            <input type="text" name="status" id="" placeholder="status" required>
+            <input type="text" name="minPrice" id="" placeholder="minPrice" required>
+
+            <input type="submit" value="Kaydet">
+        </form>
+    </section>
+</body>
+</html>

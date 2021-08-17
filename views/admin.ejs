@@ -6,19 +6,19 @@
     <%-include('./inc/nav')%>
 
     <section>
-        <h1>Anasayfa</h1>
+        <h1>Admin nasayfa</h1>
+        <a href="/admin/add">Yeni ihale ekle</a>
         <h2>İhaleler</h2>
         <ul>
             <% tenders.forEach(tender => { %>
                 <li>
-                    <a href="/tender/<%=tender._id%>"><%=tender.title%></a>
-                    <p><%=tender.detail%></p>
-                    <p><%=tender.status%></p>
-                    <p><%=tender.minPrice%></p>
+                    <p><%=tender.title%></p>
+                    <a href="">Delete</a>
                 </li>
             <% }) %>
             
         </ul>
+
     </section>
 </body>
 </html>
