@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const bcryp = require("bcrypt-nodejs");
+const bcrypt = require("bcrypt-nodejs");
 const mongoose = require("mongoose");
 const adminRoutes = require("./routes/adminRoutes")
 const tenderRoutes = require("./routes/tenderRoutes")
+const authRoutes = require("./routes/authRoutes")
 
 const app = express();
 
@@ -45,16 +46,11 @@ app.get("/", (req, res) => {
 })
 
 
-
-app.get("/login", (req, res) => {
-    res.render("login", { title: "Login" })
-})
-
-
-
 app.use( "/admin", adminRoutes)
 
 app.use( "/tender", tenderRoutes)
+
+app.use( "/", authRoutes)
 
 
 
