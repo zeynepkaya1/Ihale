@@ -8,9 +8,10 @@ const app = express();
 
 const dbURL = 'mongodb+srv://admin:admin@tenderdb.f9vl9.mongodb.net/tender-db?retryWrites=true&w=majority';
 
+
 app.set("view engine", "ejs");
 
-mongoose.connect(dbURL, { useUnifiedTopology: true, useUnifiedTopology: true })
+mongoose.connect(dbURL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then((result) => app.listen(3000, () => {
         console.log("app is running on port 3000...");
     }))
@@ -86,6 +87,21 @@ app.post("/admin/add", (req, res) => {
         console.log(err)
     })
 })
+
+
+app.delete("/admin/delete/:id", (req, res) => {
+    const id = req.params.id
+    Tender.findByIdAndDelete(id)
+    .then((result) => {
+        res.json({ link:"/admin" })
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+})
+
+
+
 
 
 

@@ -1,24 +1,51 @@
 <html lang="en">
+
 <head>
     <%-include('./inc/head')%>
 </head>
-<body>  
+
+<body>
     <%-include('./inc/nav')%>
 
-    <section>
-        <h1>Admin nasayfa</h1>
-        <a href="/admin/add">Yeni ihale ekle</a>
-        <h2>İhaleler</h2>
-        <ul>
-            <% tenders.forEach(tender => { %>
-                <li>
-                    <p><%=tender.title%></p>
-                    <a href="">Delete</a>
-                </li>
-            <% }) %>
-            
-        </ul>
+        <section>
+            <h1>Admin nasayfa</h1>
+            <a href="/admin/add">Yeni ihale ekle</a>
+            <h2>İhaleler</h2>
+            <ul>
+                <% tenders.forEach(tender=> { %>
+                    <li>
+                        <p><%=tender.title%></p>
+                        <a id="del" href="#" data-doc="<%=tender._id%>">Delete</a>
+                    </li>
+                <% }) %>
+            </ul>
+        </section>
+        <script>
 
-    </section>
+            const del = document.querySelectorAll("[id='del']")
+
+            del.forEach(del => del.addEventListener('click', function () {
+
+                console.log(this.dataset.doc);
+
+                const endpoint = "/admin/delete/" + this.dataset.doc
+
+                // const endpoint = "/admin/delete/${this.dataset.doc}"
+
+                console.log(endpoint);
+
+                fetch(endpoint, {
+                    method: 'DELETE'
+                })
+                    .then((response) => response.json())
+                    .then((data) => window.location.href = data.link)
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            }));
+
+
+        </script>
 </body>
+
 </html>
