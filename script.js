@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const bcryp = require("bcrypt-nodejs");
 const mongoose = require("mongoose");
-const Tender = require("./models/ihale");
+const adminRoutes = require("./routes/adminRoutes")
+const tenderRoutes = require("./routes/tenderRoutes")
 
 const app = express();
 
@@ -40,67 +41,20 @@ const database = {
 };
 
 app.get("/", (req, res) => {
-    Tender.find().sort({ createdAt: -1 })
-        .then((result) => {
-            res.render("index", { title: "Anasayfa", tenders: result });
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    res.redirect("/tender")
 })
 
-app.get("/tender/:id", (req, res) => {
-    const id = req.params.id
 
-    Tender.findById(id)
-    .then((result) => {
-        res.render("tender", { tender: result, title: "Detay"})
-    })
-})
 
 app.get("/login", (req, res) => {
     res.render("login", { title: "Login" })
 })
 
-app.get("/admin", (req, res) => {
-    Tender.find().sort({ createdAt: -1 })
-    .then((result) => {
-        res.render("admin", { title: "Admin", tenders: result });
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
-
-app.get("/admin/add", (req, res) => {
-    res.render("add", { title: "Yeni ihale"})
-})
-
-app.post("/admin/add", (req, res) => {
-    const tender = new Tender(req.body)
-
-    tender.save()
-    .then((result) => {
-        res.redirect('/admin')
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
 
 
-app.delete("/admin/delete/:id", (req, res) => {
-    const id = req.params.id
-    Tender.findByIdAndDelete(id)
-    .then((result) => {
-        res.json({ link:"/admin" })
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
+app.use(adminRoutes)
 
-
+app.use(tenderRoutes)
 
 
 
