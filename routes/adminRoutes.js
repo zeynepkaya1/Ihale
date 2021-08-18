@@ -1,43 +1,15 @@
 const express = require("express")
 const router = express.Router()
-const Tender = require("../models/ihale");
+const adminController = require("../controllers/adminController")
 
-router.get("/admin", (req, res) => {
-    Tender.find().sort({ createdAt: -1 })
-    .then((result) => {
-        res.render("admin", { title: "Admin", tenders: result });
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
 
-router.get("/admin/add", (req, res) => {
-    res.render("add", { title: "Yeni ihale"})
-})
+router.get("/", adminController.admin_index )
 
-router.post("/admin/add", (req, res) => {
-    const tender = new Tender(req.body)
+router.get("/add", adminController.admin_add )
 
-    tender.save()
-    .then((result) => {
-        res.redirect('/admin')
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
+router.post("/add", adminController.admin_add_post )
 
-router.delete("/admin/delete/:id", (req, res) => {
-    const id = req.params.id
-    Tender.findByIdAndDelete(id)
-    .then((result) => {
-        res.json({ link:"/admin" })
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
+router.delete("/delete/:id", adminController.admin_delete )
 
 
 module.exports = router

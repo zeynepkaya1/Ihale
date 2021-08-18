@@ -52,9 +52,9 @@ app.get("/login", (req, res) => {
 
 
 
-app.use(adminRoutes)
+app.use( "/admin", adminRoutes)
 
-app.use(tenderRoutes)
+app.use( "/tender", tenderRoutes)
 
 
 

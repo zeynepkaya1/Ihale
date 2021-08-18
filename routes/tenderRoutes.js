@@ -1,25 +1,11 @@
 const express = require("express")
 const router = express.Router()
-const Tender = require("../models/ihale");
+const tenderController = require("../controllers/tenderController")
 
 
-router.get("/tender", (req, res) => {
-    Tender.find().sort({ createdAt: -1 })
-        .then((result) => {
-            res.render("index", { title: "Anasayfa", tenders: result });
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-})
+router.get("/", tenderController.tender_index )
 
-router.get("/tender/:id", (req, res) => {
-    const id = req.params.id
+router.get("/:id", tenderController.tender_content )
 
-    Tender.findById(id)
-    .then((result) => {
-        res.render("tender", { tender: result, title: "Detay"})
-    })
-})
 
 module.exports = router
