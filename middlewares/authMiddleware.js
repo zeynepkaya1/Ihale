@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const User = require("../models/users")
 
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt
@@ -18,5 +19,25 @@ const requireAuth = (req, res, next) => {
     }
 }
 
+const checkUser =  (req, res, next) => {
+    const token = req.cookies.jwt
 
-module.exports = { requireAuth }
+    if(token){
+        jwt.verify(token, "gizli kelime", async (err, decodedToken) => {
+            if(err){
+                console.log(err)
+                res.locals.user = null
+            } else {
+                console.log(decodedToken)
+                let user = await User.findById(decodedToken.id)
+                res.locals.user = user
+                next()
+            }
+        })
+    } else {
+        res.locals.user = null
+        next()
+    }
+}
+
+module.exports = { requireAuth, checkUser }

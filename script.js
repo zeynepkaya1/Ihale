@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser")
 const adminRoutes = require("./routes/adminRoutes")
 const tenderRoutes = require("./routes/tenderRoutes")
 const authRoutes = require("./routes/authRoutes")
-const { requireAuth } = require("./middlewares/authMiddleware")
+const { requireAuth, checkUser } = require("./middlewares/authMiddleware")
 
 const app = express();
 
@@ -45,6 +45,8 @@ const database = {
     ],
 };
 
+
+app.get("*", checkUser)
 app.get("/", (req, res) => {
     res.redirect("/tender")
 })
