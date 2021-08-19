@@ -19,8 +19,21 @@ const tender_content = (req, res) => {
     })
 }
 
+const tender_active = (req, res) => {
+    const query = { status: 1 }
+
+    Tender.find(query).sort({ createdAt: -1 })
+        .then((result) => {
+            res.render("active", { title: "Active", tenders: result });
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+
 
 module.exports = {
     tender_index,
-    tender_content
+    tender_content,
+    tender_active
 }

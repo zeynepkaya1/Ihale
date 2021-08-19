@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+    <%-include('./inc/head')%>
+</head>
+<body>  
+    <%-include('./inc/nav')%>
+
+    <section>
+        <h1>Active tenders</h1>
+
+        <ul>
+            <% tenders.forEach(tender => { %>
+                <li>
+                    <a href="/tender/<%=tender._id%>"><%=tender.title%></a>
+                    <p><%=tender.detail%></p>
+                    <p><%=tender.status%></p>
+                    <p><%=tender.minPrice%></p>
+                </li>
+            <% }) %>
+            
+        </ul>
+    </section>
+</body>
+</html>
