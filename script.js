@@ -27,6 +27,11 @@ app.use(express.urlencoded({ extended: true }))
 //app.use(morgan("dev"))
 app.use(cookieParser())
 
+
+
+
+
+
 app.use(bodyParser.json());
 
 // const database = {
