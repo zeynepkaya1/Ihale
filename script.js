@@ -2,9 +2,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser")
 const adminRoutes = require("./routes/adminRoutes")
 const tenderRoutes = require("./routes/tenderRoutes")
 const authRoutes = require("./routes/authRoutes")
+const { requireAuth } = require("./middlewares/authMiddleware")
 
 const app = express();
 
@@ -21,6 +23,8 @@ mongoose.connect(dbURL, { useNewUrlParser: true, useCreateIndex: true, useUnifie
 
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
+//app.use(morgan("dev"))
+app.use(cookieParser())
 
 app.use(bodyParser.json());
 
@@ -46,7 +50,7 @@ app.get("/", (req, res) => {
 })
 
 
-app.use( "/admin", adminRoutes)
+app.use( "/admin", requireAuth, adminRoutes)
 
 app.use( "/tender", tenderRoutes)
 
